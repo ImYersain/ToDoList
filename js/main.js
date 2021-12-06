@@ -11,6 +11,7 @@ if(localStorage.getItem('todo')){
 }
 
 addButton.addEventListener('click', () => {
+	if(!addMessage.value) return;
 	let newTodo = {
 		todo: addMessage.value,
 		checked: false,
@@ -20,21 +21,50 @@ addButton.addEventListener('click', () => {
 	todoList.push(newTodo);
 	showMessages();
 	localStorage.setItem('todo', JSON.stringify(todoList));
+	addMessage.value = '';
 });
 
 
 
 function showMessages(){
 	let displayMessage = '';
+	if(todoList.length === 0) todo.innerHTML = '';
 	todoList.forEach((item, i) => {
 		
 		displayMessage += `
 		<li>
 		<input type='checkbox' id='item_${i}' ${item.checked ? 'checked': ''}>
-		<label for='item_${i}'>${item.todo}</label>
+		<label for='item_${i}' class='${item.important ? 'important': ''}'>${item.todo}</label>
 		</li>
 		`;
 
 		todo.innerHTML = displayMessage;
 	});
 }
+
+todo.addEventListener('change', (e) => {
+	let idInput = e.target.getAttribute('id'),
+		valueLabel = todo.querySelector(`[for=${idInput}]`).innerHTML;
+
+	todoList.forEach((item) => {
+		if(item.todo === valueLabel){
+			item.checked = !item.checked;
+			localStorage.setItem('todo', JSON.stringify(todoList));
+		}
+	});
+});
+
+todo.addEventListener('contextmenu', (e) =>{
+	e.preventDefault();
+	todoList.forEach((item,i) => {
+		if(item.todo === e.target.innerHTML){
+			if(e.ctrlKey || e.metaKey){
+				todoList.splice(i,1);
+			} else {
+				item.important = !item.important;
+			}
+			localStorage.setItem('todo', JSON.stringify(todoList));
+			showMessages();
+		}
+	});
+});
