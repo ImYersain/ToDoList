@@ -68,3 +68,29 @@ todo.addEventListener('contextmenu', (e) =>{
 		}
 	});
 });
+
+
+
+
+
+
+
+/*   чуть чуть наследования ES6+(классами)    - к проекту туду не относится
+
+const dog = new Animal({name: 'Alex', color: 'white'})
+
+class Cat extends Animal{
+	constructor(options){
+  	super(options)
+  } 
+  
+  voice(){
+  	super.voice();
+    console.log(`${this.name} sounds like myay`)
+  }
+}
+
+const cat = new Cat({name:'Murzik', color:'black'})
+cat.voice()
+
+*/
